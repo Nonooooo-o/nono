@@ -1,10 +1,12 @@
 import openai
+import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# OpenAI API Key (Replace with your own)
-OPENAI_API_KEY = "your_openai_api_key"
+# 获取 OpenAI API Key（从环境变量）
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
 
 def chat_with_ai(user_id, user_input):
     """
@@ -26,4 +28,5 @@ def chat():
     return jsonify({"reply": reply})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # 自动获取 Railway 端口
+    app.run(host="0.0.0.0", port=port)
